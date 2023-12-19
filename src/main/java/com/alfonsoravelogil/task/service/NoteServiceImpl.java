@@ -10,7 +10,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Data
@@ -22,13 +24,23 @@ public class NoteServiceImpl implements INoteService{
     @Override
     @Transactional(readOnly = true)
     public List<NoteDTO> getAllNotes() {
+
+        // Optional<List<Note>> notesOptional = Optional.ofNullable(noteRepository.findAll());
+        // List<Note> notes = notesOptional.orElse(Collections.emptyList());
+        // return noteRepository.findAll().stream().map(this::convertToNoteDTO).toList();
         return noteRepository.findAll().stream().map(this::convertToNoteDTO).toList();
     }
 
     @Override
     @Transactional(readOnly = true)
     public NoteDTO getNoteById(Long id) {
-        return noteRepository.findById(id).map(this::convertToNoteDTO).orElse(null);
+        NoteDTO note = noteRepository.findById(id).map(this::convertToNoteDTO).orElse(null);
+
+        if (note == null){
+            throw new NoteNotFoundException("Note not found", HttpStatus.NOT_FOUND);
+        }
+
+        return note;
     }
 
     @Override
