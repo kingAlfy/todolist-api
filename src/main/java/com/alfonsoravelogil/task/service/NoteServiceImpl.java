@@ -37,7 +37,7 @@ public class NoteServiceImpl implements INoteService{
         NoteDTO note = noteRepository.findById(id).map(this::convertToNoteDTO).orElse(null);
 
         if (note == null){
-            throw new NoteNotFoundException("Note not found", HttpStatus.NOT_FOUND);
+            throw new NoteNotFoundException();
         }
 
         return note;
@@ -45,23 +45,44 @@ public class NoteServiceImpl implements INoteService{
 
     @Override
     @Transactional
-    public NoteDTO createNote(NoteDTO noteDTO) {
-        Note note = convertToNote(noteDTO);
+    public NoteDTO createNote(NoteDTO noteDTOClient) {
+        Note note = convertToNote(noteDTOClient);
         Note savedNote = noteRepository.save(note);
         return convertToNoteDTO(savedNote);
     }
 
     @Override
     @Transactional
-    public NoteDTO updateNote(Long id, NoteDTO note) {
+    public NoteDTO updateNoteUsingPut(Long id, NoteDTO noteDTOClient) {
         Note existingNote = noteRepository.findById(id).orElse(null);
 
         if  (existingNote == null){
-            return null;
+            return createNote(noteDTOClient);
         }
 
-        existingNote.setName(note.getName());
-        existingNote.setDescription(note.getDescription());
+        existingNote.setName(noteDTOClient.getName());
+        existingNote.setDescription(noteDTOClient.getDescription());
+        // existingNote.setCreated_at(note.getCreatedAt());
+
+        return convertToNoteDTO(noteRepository.save(existingNote));
+    }
+
+    @Override
+    public NoteDTO updateNoteUsingPatch(Long id, NoteDTO noteDTOClient) {
+        Note existingNote = noteRepository.findById(id).orElse(null);
+
+        if  (existingNote == null){
+            throw new NoteNotFoundException();
+        }
+
+        if ( noteDTOClient.getName() != null ) {
+            existingNote.setName(noteDTOClient.getName());
+        }
+
+        if ( noteDTOClient.getDescription() != null){
+            existingNote.setDescription(noteDTOClient.getDescription());
+        }
+
         // existingNote.setCreated_at(note.getCreatedAt());
 
         return convertToNoteDTO(noteRepository.save(existingNote));
@@ -73,7 +94,7 @@ public class NoteServiceImpl implements INoteService{
         Note note = noteRepository.findById(id).orElse(null);
 
         if (note == null){
-            throw new NoteNotFoundException("Note not found", HttpStatus.NOT_FOUND);
+            throw new NoteNotFoundException();
         }
 
         noteRepository.deleteById(id);

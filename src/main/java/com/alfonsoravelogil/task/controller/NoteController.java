@@ -36,31 +36,29 @@ public class NoteController {
             return noteReturned;
         }
 
-        throw new NoteNotFoundException("Note not exist", HttpStatus.NOT_FOUND);
+        throw new NoteNotFoundException();
     }
 
-    @PostMapping()
-    public NoteDTO createNote(@RequestBody NoteDTO noteDTO){
-        return noteService.createNote(noteDTO);
+    @PostMapping
+    public ResponseEntity<NoteDTO> createNote(@RequestBody NoteDTO noteDTOClient){
+        return ResponseEntity.status(HttpStatus.CREATED).body(noteService.createNote(noteDTOClient));
     }
 
     @PutMapping("/{id}")
-    public NoteDTO updateNote(@PathVariable Long id, @RequestBody NoteDTO noteDTO){
-        NoteDTO noteReturned = noteService.getNoteById(id);
+    public NoteDTO putNote(@PathVariable Long id, @RequestBody NoteDTO noteDTOClient){
+        return noteService.updateNoteUsingPut(id, noteDTOClient);
+    }
 
-        if (noteReturned == null){
-            throw new NoteNotFoundException("Note not exist", HttpStatus.NOT_FOUND);
-        }
-
-
-        return noteService.updateNote(id, noteDTO);
+    @PatchMapping("/{id}")
+    public NoteDTO updateNote(@PathVariable Long id, @RequestBody NoteDTO noteDTOClient){
+        return noteService.updateNoteUsingPatch(id, noteDTOClient);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<NoteDTO> deleteNote(@PathVariable Long id){
         noteService.deleteNoteById(id);
 
-        return ResponseEntity.ok().build();
+        return ResponseEntity.noContent().build();
     }
 
 }

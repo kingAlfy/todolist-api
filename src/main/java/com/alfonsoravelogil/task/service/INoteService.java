@@ -14,7 +14,9 @@ public interface INoteService {
     NoteDTO createNote(NoteDTO note);
 
 
-    NoteDTO updateNote(Long id, NoteDTO note);
+    NoteDTO updateNoteUsingPut(Long id, NoteDTO note);
+
+    NoteDTO updateNoteUsingPatch(Long id, NoteDTO note);
 
     void deleteNoteById(Long id);
 }
