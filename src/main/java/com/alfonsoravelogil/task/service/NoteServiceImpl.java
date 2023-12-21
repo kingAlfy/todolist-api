@@ -60,8 +60,8 @@ public class NoteServiceImpl implements INoteService{
             return createNote(noteDTOClient);
         }
 
-        existingNote.setName(noteDTOClient.getName());
-        existingNote.setDescription(noteDTOClient.getDescription());
+        existingNote.setTitle(noteDTOClient.getTitle());
+        existingNote.setContent(noteDTOClient.getContent());
         // existingNote.setCreated_at(note.getCreatedAt());
 
         return convertToNoteDTO(noteRepository.save(existingNote));
@@ -75,12 +75,12 @@ public class NoteServiceImpl implements INoteService{
             throw new NoteNotFoundException();
         }
 
-        if ( noteDTOClient.getName() != null ) {
-            existingNote.setName(noteDTOClient.getName());
+        if ( noteDTOClient.getTitle() != null ) {
+            existingNote.setTitle(noteDTOClient.getTitle());
         }
 
-        if ( noteDTOClient.getDescription() != null){
-            existingNote.setDescription(noteDTOClient.getDescription());
+        if ( noteDTOClient.getContent() != null){
+            existingNote.setContent(noteDTOClient.getContent());
         }
 
         // existingNote.setCreated_at(note.getCreatedAt());
@@ -105,8 +105,8 @@ public class NoteServiceImpl implements INoteService{
     private NoteDTO convertToNoteDTO(Note note){
         NoteDTO noteDTO = new NoteDTO();
         noteDTO.setId(note.getId());
-        noteDTO.setName(note.getName());
-        noteDTO.setDescription(note.getDescription());
+        noteDTO.setTitle(note.getTitle());
+        noteDTO.setContent(note.getContent());
         // noteDTO.setCreatedAt(note.getCreated_at());
 
         return noteDTO;
@@ -114,8 +114,8 @@ public class NoteServiceImpl implements INoteService{
 
     private Note convertToNote(NoteDTO noteDTO){
         Note note = new Note();
-        note.setName(noteDTO.getName());
-        note.setDescription(noteDTO.getDescription());
+        note.setTitle(noteDTO.getTitle());
+        note.setContent(noteDTO.getContent());
         // note.setCreated_at(noteDTO.getCreatedAt());
         return note;
     }

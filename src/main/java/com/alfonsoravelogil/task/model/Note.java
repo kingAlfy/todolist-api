@@ -21,13 +21,13 @@ public class Note {
 
     @Id @GeneratedValue(strategy = GenerationType.AUTO)
     Long id;
-    String name;
-    String description;
+    String title;
+    String content;
     // Date created_at;
 
-    public Note(String name, String description) {
-        this.name = name;
-        this.description = description;
+    public Note(String title, String content) {
+        this.title = title;
+        this.content = content;
     }
 
 }
