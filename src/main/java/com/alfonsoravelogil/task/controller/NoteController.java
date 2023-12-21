@@ -30,13 +30,7 @@ public class NoteController {
 
     @GetMapping("/{id}")
     public NoteDTO getNoteById(@PathVariable Long id){
-        NoteDTO noteReturned = noteService.getNoteById(id);
-
-        if (noteReturned != null){
-            return noteReturned;
-        }
-
-        throw new NoteNotFoundException();
+        return noteService.getNoteById(id);
     }
 
     @PostMapping
